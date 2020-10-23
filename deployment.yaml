@@ -15,7 +15,7 @@ spec:
       containers:
         - name: tcp-server
           # This is the import path for the Go binary to build and run.
-          image: ko://github.com/yangl900/knet
+          image: ko://github.com/yangl900/knet/server
           ports:
             - containerPort: 8005
             - containerPort: 8600

@@ -19,7 +19,13 @@ func main() {
 func startTCPServer(addr string, interval int) {
 	var connID = 0
 
-	l, err := net.Listen("tcp", addr)
+	tcpAddr, err := net.ResolveTCPAddr("tcp", addr)
+	if err != nil {
+		fmt.Println("Error resolve address:", err.Error())
+		os.Exit(1)
+	}
+
+	l, err := net.ListenTCP("tcp", tcpAddr)
 	if err != nil {
 		fmt.Println("Error listening:", err.Error())
 		os.Exit(1)
@@ -28,16 +34,14 @@ func startTCPServer(addr string, interval int) {
 	defer l.Close()
 	fmt.Println("Listening on " + addr)
 	for {
-		conn, err := l.Accept()
+		conn, err := l.AcceptTCP()
 		if err != nil {
 			fmt.Println("Error accepting: ", err.Error())
 			os.Exit(1)
 		}
 
 		fmt.Printf("[%s] Accepted conn %d from %s\n", conn.LocalAddr(), connID, conn.RemoteAddr())
-
-		tcpConn := conn.(*net.TCPConn)
-		err = tcpConn.SetKeepAlive(false)
+		err = conn.SetKeepAlive(false)
 		if err != nil {
 			fmt.Println("Failed to set keep alive: ", err.Error())
 			os.Exit(1)
@@ -48,7 +52,7 @@ func startTCPServer(addr string, interval int) {
 	}
 }
 
-func handleConnection(conn net.Conn, id, interval int) {
+func handleConnection(conn *net.TCPConn, id, interval int) {
 	// Make a buffer to hold incoming data.
 	buf := make([]byte, 1024)
 	// Read the incoming connection into the buffer.
@@ -67,7 +71,7 @@ func handleConnection(conn net.Conn, id, interval int) {
 
 		count++
 		msg := fmt.Sprintf("[%s->%s][%d] message %d timestamp %s\n", conn.LocalAddr(), conn.RemoteAddr(), id, count, time.Now().UTC().Format(time.RFC3339))
-		_, err := conn.Write([]byte(msg))
+		_, err = conn.Write([]byte(msg))
 		if err != nil {
 			fmt.Printf("[%s][%d] Connection closed at count %d: %v\n", conn.LocalAddr(), id, count, err)
 			break
