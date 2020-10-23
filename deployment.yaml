@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knet
+spec:
+  selector:
+    matchLabels:
+      knet: server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        knet: server
+    spec:
+      containers:
+        - name: tcp-server
+          # This is the import path for the Go binary to build and run.
+          image: ko://github.com/yangl900/knet
+          ports:
+            - containerPort: 8005
+            - containerPort: 8600
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knet
+spec:
+  externalTrafficPolicy: Local
+  ports:
+  - name: default
+    port: 8005
+    protocol: TCP
+    targetPort: 8005
+  - name: hour
+    port: 8600
+    protocol: TCP
+    targetPort: 8600
+  selector:
+    knet: server
+  sessionAffinity: None
+  type: LoadBalancer
