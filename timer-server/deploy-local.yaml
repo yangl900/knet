@@ -1,24 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: knet
+  name: knet-timer-server
 spec:
   selector:
     matchLabels:
-      knet: server
+      knet: timer-server
   replicas: 1
   template:
     metadata:
       labels:
-        knet: server
+        knet: timer-server
     spec:
       containers:
         - name: tcp-server
           # This is the import path for the Go binary to build and run.
-          image: ko://github.com/yangl900/knet/server
+          image: ko://github.com/yangl900/knet/timer-server
           ports:
             - containerPort: 8005
             - containerPort: 8600
+        - name: tcpdump
+          image: corfr/tcpdump
+          command:
+            - "/usr/sbin/tcpdump"
+            - "-i"
+            - "any"
+            - "-nn"
 ---
 apiVersion: v1
 kind: Service
@@ -36,6 +43,6 @@ spec:
     protocol: TCP
     targetPort: 8600
   selector:
-    knet: server
+    knet: timer-server
   sessionAffinity: None
   type: LoadBalancer

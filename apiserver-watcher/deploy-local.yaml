@@ -1,0 +1,52 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["configmaps"]
+  verbs: ["get", "watch", "list", "update", "patch", "delete", "create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+subjects:
+# You can specify more than one "subject"
+- kind: ServiceAccount
+  name: default # "name" is case sensitive
+  apiGroup: ""
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: pod-reader # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knet-apiserver-watcher
+spec:
+  selector:
+    matchLabels:
+      knet: apiserver-watcher
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        knet: apiserver-watcher
+    spec:
+      containers:
+        - name: watcher
+          # This is the import path for the Go binary to build and run.
+          image: ko://github.com/yangl900/knet/apiserver-watcher
+          env:
+          - name: CHANGE_INTERVAL_SECONDS
+            value: "600"
+        - name: tcpdump
+          image: corfr/tcpdump
+          command:
+            - "/usr/sbin/tcpdump"
+            - "-i"
+            - "any"
+            - "-nn"
