@@ -82,3 +82,13 @@ client side tcp dump showed the keep alive ACK every 30s.
 06:27:10.782393 IP 10.0.0.1.443 > 10.244.0.62.43848: Flags [.], ack 58300, win 501, options [nop,nop,TS val 767405320 ecr 891368331], length 0
 
 ```
+
+## Running the tests
+The tests and test server can be deployed using [KO](https://github.com/google/ko).
+
+In the test folder, run following, it will be deployed to the k8s cluster in current context.
+
+```bash
+ko apply -f deployment-local.yaml
+```
+
