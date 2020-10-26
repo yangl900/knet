@@ -31,6 +31,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: knet
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-tcp-idle-timeout: "1"
 spec:
   externalTrafficPolicy: Local
   ports:
