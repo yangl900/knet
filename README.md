@@ -89,6 +89,6 @@ The tests and test server can be deployed using [KO](https://github.com/google/k
 In the test folder, run following, it will be deployed to the k8s cluster in current context.
 
 ```bash
-ko apply -f deployment-local.yaml
+ko apply -f deploy-local.yaml
 ```
 
