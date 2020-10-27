@@ -50,3 +50,29 @@ spec:
             - "-i"
             - "any"
             - "-nn"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knet-apiserver-watcher-py
+spec:
+  selector:
+    matchLabels:
+      knet: apiserver-watcher-py
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        knet: apiserver-watcher-py
+    spec:
+      containers:
+        - name: watcher
+          image: yangl/apiserver-watcher-py
+          imagePullPolicy: Always
+        - name: tcpdump
+          image: corfr/tcpdump
+          command:
+            - "/usr/sbin/tcpdump"
+            - "-i"
+            - "any"
+            - "-nn"
