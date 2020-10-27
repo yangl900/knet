@@ -10,7 +10,7 @@ The server has 2 ports, port 8005 sends data every 5 seconds, and port 8600 send
 ### Test Results
 
 | Client  | Result | 
-|---|---|---|
+|---|---|
 |  curl | handles RST well  |  
 |  python | TODO |
 |  .Net Core | TODO | 
@@ -56,7 +56,7 @@ apiserver-watcher is a test pod implmemented using standard k8s client. It has 2
 Test matrix
 
 | Client  | Public cluster | Private cluster |
-|---|---|---|---|
+|---|---|---|
 |  client-go | PASS |  TODO |
 |  client-python | TODO | TODO |
 |  .Net Core | TODO | TODO |
@@ -121,5 +121,13 @@ Following TCP dump showed that client-python handled RST and closed the connecti
 05:29:31.673309 IP 10.244.0.74.59098 > 10.0.0.1.443: Flags [.], ack 1, win 502, options [nop,nop,TS val 169366904 ecr 850346211], length 0
 05:29:31.673811 IP 10.244.0.74.59098 > 10.0.0.1.443: Flags [P.], seq 1:518, ack 1, win 502, options [nop,nop,TS val 169366904 ecr 850346211], length 517
 05:29:31.674435 IP 10.0.0.1.443 > 10.244.0.74.59098: Flags [.], ack 518, win 506, options [nop,nop,TS val 850346212 ecr 169366904], length 0
+
+## Running the tests
+The tests and test server can be deployed using [KO](https://github.com/google/ko).
+
+In the test folder, run following, it will be deployed to the k8s cluster in current context.
+
+```bash
+ko apply -f deploy-local.yaml
 ```
 
