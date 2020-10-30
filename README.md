@@ -7,14 +7,6 @@ timer-server is a simple TCP server that sends time back to client on a timer. T
 
 The server has 2 ports, port 8005 sends data every 5 seconds, and port 8600 sends data every 600 seconds. The server deployment includes a tcpdump sidecar, so we can see the logs always.
 
-### Test Results
-
-| Client  | Result | 
-|---|---|
-|  curl | handles RST well  |  
-|  python | TODO |
-|  .Net Core | TODO | 
-
 ### `curl`
 > Test environment: AKS cluster v1.17.11 with Standard LB
 
@@ -41,12 +33,6 @@ Server side tcpdump shows SLB sends RST on 4 min and 20s idle to server side too
 05:52:11.667639 IP 67.185.98.118.51648 > 10.244.0.49.8600: Flags [R], seq 3269278221, win 0, length 0
 ```
 
-### Python
-TODO
-
-### .Net Core
-TODO
-
 ## apiserver-watcher
 apiserver-watcher is a test pod implmemented using standard k8s client. It has 2 very simple go routines: `Watcher` and `Updater`. Watcher establish a watch connection to API server for all configmap changes in namespace. Updater will update a configmap named `trigger` every 600s (interval configurable). Whenver watcher got a `trigger` configmap update event, it will notify Updater. And Updater will wait for up to 10s for the Watcher notify, if it did not get the notify in 10s, it declares a test failure and log a new configmap named `failure-xxxx` with timestamp in it.
 
@@ -55,10 +41,10 @@ apiserver-watcher is a test pod implmemented using standard k8s client. It has 2
 
 Test matrix
 
-| Client  | Public cluster | Private cluster |
-|---|---|---|
-|  client-go | PASS |  TODO |
-|  client-python | TODO | TODO |
+| Client  | Has Keepalive? | Public cluster | Private cluster |
+|---|---|---|---|
+|  client-go | YES | PASS | PASS |
+|  client-python | NO | PASS | PASS |
 |  .Net Core | TODO | TODO |
 
 #### client-go tests
