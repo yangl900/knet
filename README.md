@@ -48,7 +48,7 @@ Test matrix
 |  .Net Core | TODO | TODO |
 
 #### client-go tests
-> [client-go](https://github.com/kubernetes/client-go) v0.19.3
+> [client-go](https://github.com/kubernetes/client-go) v0.19.3 v0.17.2
 
 The k8s client-go by default turns on TCP Keepalive, and the client side will send an ACK packet to API server every 30s. With this, even though the SLB default timeout is 4 minutes, the TCP connection will never be idle and so will never be reset.
 
