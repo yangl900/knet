@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/1489e197-43c4-4a6d-9c72-7cdbf920cec6/resourceGroups/aks/providers/Microsoft.Web/sites/snatserver",
+    "appService.deploySubpath": "snat-server/snatserver"
+}

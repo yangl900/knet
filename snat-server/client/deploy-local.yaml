@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knet-snat-client
+spec:
+  selector:
+    matchLabels:
+      knet: snat-client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        knet: snat-client
+    spec:
+      containers:
+        - name: client
+          # This is the import path for the Go binary to build and run.
+          image: ko://github.com/yangl900/knet/snat-server/client
+        - name: tcpdump
+          image: corfr/tcpdump
+          command:
+            - "/usr/sbin/tcpdump"
+            - "-i"
+            - "any"
+            - "-nn"

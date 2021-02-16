@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p
+    div(class="alert alert-primary" role="alert")
+      | This page shows the number of concurrent connections from each client IP address.
+      | Use GET /hook to estabilish a connection, the API will only return after 60s.
+  table.table.table-striped(border='1')
+    tr
+      th IP
+      th Connections
+    each val, key in clients
+      tr
+        td= key
+        td= val 
