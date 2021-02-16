@@ -55,6 +55,7 @@ spec:
             - "-i"
             - "any"
             - "-nn"
+            - "tcp"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -81,3 +82,4 @@ spec:
             - "-i"
             - "any"
             - "-nn"
+            - "tcp"
